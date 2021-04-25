@@ -44,3 +44,21 @@ $(document).ready(function(){
     });
 });
 </script>
+
+
+
+---- app.py-------
+
+@app.route("/range",methods=["POST","GET"])
+def range(): 
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor) 
+    if request.method == 'POST':
+        From = request.form['From']
+        to = request.form['to']
+        print(From)
+        print(to)
+        query = "SELECT * from orders WHERE purchased_date BETWEEN '{}' AND '{}'".format(From,to)
+        cur.execute(query)
+        ordersrange = cur.fetchall()
+    return jsonify({'htmlresponse': render_template('response.html', ordersrange=ordersrange)})
+ 
